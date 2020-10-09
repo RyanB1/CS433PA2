@@ -19,13 +19,47 @@ public class HuffmanEncoder {
 		encode();
 	}
 
-	private void encode() throws IndexOutOfBoundsException { // complete this function
+	private void encode() throws IndexOutOfBoundsException { 
+		BinaryTreeNode root = buildTree();
+		createTable(root, "");
+		for(int i = 0; i <= sigma - 1; i++) {
+			char c = alphabet[i];
+			String str = getEncoding(c);
+			encodingLength += frequencies[i] * str.length();
+			tableSize += str.length() + 8;
+		}
 	}
 
-	private BinaryTreeNode buildTree() throws IndexOutOfBoundsException { // complete this function
+	private BinaryTreeNode buildTree() throws IndexOutOfBoundsException { 
+		PriorityQueue<BinaryTreeNode> pq = new PriorityQueue<BinaryTreeNode>();
+		for(int i = 0; i <= sigma - 1; i++) {
+			BinaryTreeNode x = new BinaryTreeNode(alphabet[i], frequencies[i]);
+			pq.setPriority(x, frequencies[i]);
+		}
+		while(pq.getSize() > 1) {
+			BinaryTreeNode min = pq.getMinimumItem();
+			pq.deleteMinimum();
+			BinaryTreeNode secondMin = pq.getMinimumItem();
+			pq.deleteMinimum();
+			BinaryTreeNode y = new BinaryTreeNode('\0', min.value + secondMin.value);
+			y.left = min;
+			y.right = secondMin;
+			pq.setPriority(y, y.value);
+		}
+		return pq.getMinimumItem();
 	}
 
-	private void createTable(BinaryTreeNode node, String encoding) { // complete this function
+	private void createTable(BinaryTreeNode node, String encoding) { 
+		if(node.left == null && node.right == null) {
+			charToEncodingMapping.put(node.character, encoding);
+		}else {
+			if(node.left != null) {
+				createTable(node.left, encoding + "0");
+			}
+			if(node.right != null) {
+				createTable(node.right, encoding + "1");
+			}
+		}
 	}
 
 	public String getEncoding(char c) {
