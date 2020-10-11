@@ -35,11 +35,12 @@ public class AVLApplications extends AVL {
 		}
 		return rank;
 	}
+
 	// Doesn't work for some ranges
-	public ArrayList<Integer> sortedRangeReporting(int L, int R) { 
-		//Find the successor of L 
-		AVLNode successor = search(L); //Not sure
-		ArrayList<Integer> arr = new ArrayList<Integer>();
+	public ArrayList<Integer> sortedRangeReporting(int L, int R) {
+		// Find the successor of L
+		AVLNode successor = search(L);
+		ArrayList<Integer> arr = new ArrayList<>();
 		while(successor != null && successor.value <= R) {
 			arr.add(successor.value);
 			successor = successor.next;
